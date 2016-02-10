@@ -14,7 +14,7 @@
 #include <algorithm>
 #include <cmath>
 #include <utility>
-
+#include "KDPoint.h"
 template< class TYPE, int numberOfDimensions>
 class FKDTree {
 
@@ -26,28 +26,35 @@ public:
 		theMaxNumberOfNodes = (1 << (theDepth+1)) -1;
 		for(auto& x : theDimensions)
 			x.reserve(theMaxNumberOfNodes);
+		theIds.reserve(theMaxNumberOfNodes);
+		isValid.resize(theMaxNumberOfNodes, false);
+		thePoints.reserve(nPoints);
 	}
 
-	FKDTree()
+	void push_back(const KDPoint<TYPE,numberOfDimensions>& point, const long int id)
 	{
-		theDepth = 0;
-		theMaxNumberOfNodes = 1;
-		for(auto& x : theDimensions)
-			x.reserve(theMaxNumberOfNodes);
+		for(int i = 0; i< numberOfDimensions; ++i)
+			theDimensions.at(i).push_back(point[i]);
+		theIds.push_back(id);
+
 	}
 
 
-	void push_back()
+	void build()
 	{
 
 	}
 
 
 private:
-
 	int theDepth;
 	int theMaxNumberOfNodes;
+
+	std::vector<KDPoint<TYPE,numberOfDimensions> > thePoints;
 	std::array<std::vector<TYPE>, numberOfDimensions> theDimensions;
+	std::vector<long int> theIds;
+	std::vector<bool> isValid;
+
 };
 
 

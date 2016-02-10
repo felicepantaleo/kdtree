@@ -51,10 +51,23 @@ class KDPoint {
         return theElements[i];
     }
 
+    void setId(const long int id)
+    {
+    	theId = id;
+    }
+    bool operator<(const KDPoint<TYPE,numberOfDimensions> point, int dimensionToCompare)
+    	{
+    		return theElements[dimensionToCompare] < point[dimensionToCompare];
+    	}
+
+    bool operator<=(const KDPoint<TYPE,numberOfDimensions> point, int dimensionToCompare)
+    	{
+    		return theElements[dimensionToCompare] <= point[dimensionToCompare];
+    	}
 
 private:
     std::array< TYPE, numberOfDimensions > theElements;
-
+    long int theId;
 };
 
 
