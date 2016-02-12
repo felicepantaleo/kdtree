@@ -11,21 +11,21 @@
 #include <array>
 template<class TYPE, int numberOfDimensions>
 class KDPoint {
-
-	KDPoint(): theElements() {}
+public:
+	KDPoint(): theElements(), theId(0) {}
 
 	KDPoint( TYPE x, TYPE y)
     {
-        std::static_assert( nDimensions == 2, "Point dimensionality differs from the number of passed arguments." );
+        static_assert( numberOfDimensions == 2, "Point dimensionality differs from the number of passed arguments." );
+        theId= 0;
         theElements[0] = x;
         theElements[1] = y;
-
     }
-
 
 	KDPoint( TYPE x, TYPE y, TYPE z )
     {
-        std::static_assert( nDimensions == 3, "Point dimensionality differs from the number of passed arguments." );
+        static_assert( numberOfDimensions == 3, "Point dimensionality differs from the number of passed arguments." );
+        theId(0);
         theElements[0] = x;
         theElements[1] = y;
         theElements[2] = z;
@@ -33,7 +33,8 @@ class KDPoint {
 
 	KDPoint( TYPE x, TYPE y, TYPE z, TYPE w)
     {
-        std::static_assert( nDimensions == 4, "Point dimensionality differs from the number of passed arguments." );
+        static_assert( numberOfDimensions == 4, "Point dimensionality differs from the number of passed arguments." );
+        theId(0);
         theElements[0] = x;
         theElements[1] = y;
         theElements[2] = z;
@@ -55,15 +56,25 @@ class KDPoint {
     {
     	theId = id;
     }
-    bool operator<(const KDPoint<TYPE,numberOfDimensions> point, int dimensionToCompare)
-    	{
-    		return theElements[dimensionToCompare] < point[dimensionToCompare];
-    	}
 
-    bool operator<=(const KDPoint<TYPE,numberOfDimensions> point, int dimensionToCompare)
+
+    long int getId () const
+    {
+    	return theId;
+
+
+    }
+
+    void print()
+    {
+    	std::cout << "point id: " << theId << std::endl;
+    	for(auto i : theElements)
     	{
-    		return theElements[dimensionToCompare] <= point[dimensionToCompare];
+    		std::cout << i << std::endl;
     	}
+    }
+
+
 
 private:
     std::array< TYPE, numberOfDimensions > theElements;
