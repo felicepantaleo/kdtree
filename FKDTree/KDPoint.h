@@ -9,10 +9,27 @@
 #define FKDTREE_KDPOINT_H_
 #include <type_traits>
 #include <array>
+#include <utility>
+
+
 template<class TYPE, int numberOfDimensions>
 class KDPoint {
 public:
 	KDPoint(): theElements(), theId(0) {}
+
+	KDPoint(const KDPoint< TYPE, numberOfDimensions >& otherPoint)
+	{
+		theId = otherPoint.getId();
+		for(int i=0; i<numberOfDimensions; ++i)
+			theElements[i] = otherPoint[i];
+	}
+
+
+//	KDPoint(KDPoint< TYPE, numberOfDimensions >&& otherPoint)
+//	{
+//		*this = std::move(otherPoint);
+//	}
+
 
 	KDPoint( TYPE x, TYPE y)
     {
@@ -25,7 +42,7 @@ public:
 	KDPoint( TYPE x, TYPE y, TYPE z )
     {
         static_assert( numberOfDimensions == 3, "Point dimensionality differs from the number of passed arguments." );
-        theId(0);
+        theId= 0;
         theElements[0] = x;
         theElements[1] = y;
         theElements[2] = z;
@@ -34,7 +51,7 @@ public:
 	KDPoint( TYPE x, TYPE y, TYPE z, TYPE w)
     {
         static_assert( numberOfDimensions == 4, "Point dimensionality differs from the number of passed arguments." );
-        theId(0);
+        theId= 0;
         theElements[0] = x;
         theElements[1] = y;
         theElements[2] = z;
@@ -50,6 +67,11 @@ public:
     TYPE const& operator[]( int const i ) const
     {
         return theElements[i];
+    }
+
+    void setDimension(int i, const TYPE& value)
+    {
+    	theElements[i] = value;
     }
 
     void setId(const long int id)
@@ -106,6 +128,7 @@ KDPoint<TYPE, 2> MakeKDPoint(TYPE x, TYPE y) {
   result[1] = y;
   return result;
 }
+
 
 template <typename TYPE>
 KDPoint<TYPE, 3> MakeKDPoint(TYPE x, TYPE y, TYPE z) {
