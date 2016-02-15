@@ -51,8 +51,8 @@ public:
 			const unsigned int position)
 	{
 		for (int i = 0; i < numberOfDimensions; ++i)
-			theDimensions.at(i).at(position) = point[i];
-		theIds.at(position) = point.getId();
+			theDimensions[i][position] = point[i];
+		theIds[position] = point.getId();
 
 	}
 
@@ -60,8 +60,8 @@ public:
 			const unsigned int position)
 	{
 		for (int i = 0; i < numberOfDimensions; ++i)
-			theDimensions.at(i).at(position) = point[i];
-		theIds.at(position) = point.getId();
+			theDimensions[i][position] = point[i];
+		theIds[position] = point.getId();
 
 	}
 
@@ -69,8 +69,8 @@ public:
 	{
 		KDPoint<TYPE, numberOfDimensions> point;
 		for (int i = 0; i < numberOfDimensions; ++i)
-			point.setDimension(i, theDimensions.at(i).at(index));
-		point.setId(theIds.at(index));
+			point.setDimension(i, theDimensions[i][index]);
+		point.setId(theIds[index]);
 		return point;
 	}
 
@@ -94,13 +94,13 @@ public:
 				unsigned int rightSonIndexInArray = leftSonIndexInArray + 1;
 
 				unsigned int whichElementInInterval = partition_complete_kdtree(
-						theIntervalLength.at(indexInArray));
+						theIntervalLength[indexInArray]);
 				std::nth_element(
-						thePoints.begin() + theIntervalMin.at(indexInArray),
-						thePoints.begin() + theIntervalMin.at(indexInArray)
+						thePoints.begin() + theIntervalMin[indexInArray],
+						thePoints.begin() + theIntervalMin[indexInArray]
 								+ whichElementInInterval,
-						thePoints.begin() + theIntervalMin.at(indexInArray)
-								+ theIntervalLength.at(indexInArray),
+						thePoints.begin() + theIntervalMin[indexInArray]
+								+ theIntervalLength[indexInArray],
 						[dimension](const KDPoint<TYPE,numberOfDimensions> & a, const KDPoint<TYPE,numberOfDimensions> & b) -> bool
 						{
 							if(a[dimension] == b[dimension])
@@ -109,25 +109,24 @@ public:
 							return a[dimension] < b[dimension];
 						});
 				add_at_position(
-						thePoints.at(
-								theIntervalMin.at(indexInArray)
-										+ whichElementInInterval),
+						thePoints[
+								theIntervalMin[indexInArray]
+										+ whichElementInInterval],
 						indexInArray);
 
 				if (leftSonIndexInArray < theNumberOfPoints)
 				{
-					theIntervalMin.at(leftSonIndexInArray) = theIntervalMin.at(
-							indexInArray);
-					theIntervalLength.at(leftSonIndexInArray) =
+					theIntervalMin[leftSonIndexInArray] = theIntervalMin[
+							indexInArray];
+					theIntervalLength[leftSonIndexInArray] =
 							whichElementInInterval;
 				}
 
 				if (rightSonIndexInArray < theNumberOfPoints)
 				{
-					theIntervalMin.at(rightSonIndexInArray) = theIntervalMin.at(
-							indexInArray) + whichElementInInterval + 1;
-					theIntervalLength.at(rightSonIndexInArray) =
-							(theIntervalLength.at(indexInArray) - 1
+					theIntervalMin[rightSonIndexInArray] = theIntervalMin[indexInArray] + whichElementInInterval + 1;
+					theIntervalLength[rightSonIndexInArray] =
+							(theIntervalLength[indexInArray] - 1
 									- whichElementInInterval);
 				}
 			}
@@ -139,7 +138,7 @@ public:
 		for (unsigned int indexInArray = firstIndexInDepth;
 				indexInArray < theNumberOfPoints; ++indexInArray)
 		{
-			add_at_position(thePoints.at(theIntervalMin.at(indexInArray)),
+			add_at_position(thePoints[theIntervalMin[indexInArray]],
 					indexInArray);
 
 		}
@@ -163,8 +162,8 @@ public:
 			const KDPoint<TYPE, numberOfDimensions>& minPoint,
 			const KDPoint<TYPE, numberOfDimensions>& maxPoint, int dimension)
 	{
-		return (theDimensions.at(dimension).at(index) <= maxPoint[dimension]
-				&& theDimensions.at(dimension).at(index) >= minPoint[dimension]);
+		return (theDimensions[dimension][index] <= maxPoint[dimension]
+				&& theDimensions[dimension][index] >= minPoint[dimension]);
 	}
 
 	inline
@@ -175,8 +174,8 @@ public:
 		bool inTheBox = true;
 		for (int i = 0; i < numberOfDimensions; ++i)
 		{
-			inTheBox &= (theDimensions.at(i).at(index) <= maxPoint[i]
-					&& theDimensions.at(i).at(index) >= minPoint[i]);
+			inTheBox &= (theDimensions[i][index] <= maxPoint[i]
+					&& theDimensions[i][index] >= minPoint[i]);
 		}
 		return inTheBox;
 	}
@@ -198,14 +197,14 @@ public:
 					visitedIndecesThisDepth < numberOfIndecesToVisitThisDepth;
 					visitedIndecesThisDepth++)
 			{
-				unsigned int index = indecesToVisit.at(visitedIndecesThisDepth);
-				assert(index >= 0 && index < theNumberOfPoints);
+				unsigned int index = indecesToVisit[visitedIndecesThisDepth];
+//				assert(index >= 0 && index < theNumberOfPoints);
 				bool intersection = intersects(index, minPoint, maxPoint,
 						dimension);
 				if (intersection && isInTheBox(index, minPoint, maxPoint))
 					result.push_back(getPoint(index));
 
-				bool isLowerThanBoxMin = theDimensions.at(dimension).at(index)
+				bool isLowerThanBoxMin = theDimensions[dimension][index]
 						< minPoint[dimension];
 
 				int startSon = isLowerThanBoxMin; //left son = 0, right son =1
@@ -250,8 +249,8 @@ public:
 		{
 			if (leftSonIndexInArray < theNumberOfPoints)
 			{
-				if (theDimensions.at(dimension).at(index)
-						>= theDimensions.at(dimension).at(leftSonIndexInArray))
+				if (theDimensions[dimension][index]
+						>= theDimensions[dimension][leftSonIndexInArray])
 				{
 					test_correct_build(leftSonIndexInArray,
 							(dimension + 1) % numberOfDimensions);
@@ -263,8 +262,8 @@ public:
 
 			if (rightSonIndexInArray < theNumberOfPoints)
 			{
-				if (theDimensions.at(dimension).at(index)
-						<= theDimensions.at(dimension).at(rightSonIndexInArray))
+				if (theDimensions[dimension][index]
+						<= theDimensions[dimension][rightSonIndexInArray])
 				{
 					test_correct_build(rightSonIndexInArray,
 							(dimension + 1) % numberOfDimensions);
