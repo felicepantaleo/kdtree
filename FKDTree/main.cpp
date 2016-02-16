@@ -12,6 +12,8 @@ typedef struct float4
 	float z;
 	float w;
 } float4;
+
+
 static void show_usage(std::string name)
 {
 	std::cerr << "\nUsage: " << name << " <option(s)>" << " Options:\n"
@@ -90,7 +92,7 @@ int main(int argc, char* argv[])
 	float range_z = 1;
 
 	KDPoint<float, 3> minPoint(0, 1, 8);
-	KDPoint<float, 3> maxPoint(1, 2, 8.3);
+	KDPoint<float, 3> maxPoint(0.4, 1.2, 8.3);
 	for (int i = 0; i < nPoints; ++i)
 	{
 		float x = static_cast<float>(rand())
@@ -274,12 +276,7 @@ int main(int argc, char* argv[])
 				<< std::chrono::duration_cast < std::chrono::milliseconds
 				> (end_searching - start_searching).count() << "ms"
 						<< std::endl;
-		std::cout << pointsFound << " points found using Vanilla CMSSW KDTree in "
-				<< std::chrono::duration_cast < std::chrono::milliseconds
-				> (end_searching - start_searching).count() << "ms\n"
-				<< " found points: " << pointsFound<< "\n******************************\n"
-
-						<< std::endl;
+		std::cout << pointsFound << " points found using Vanilla CMSSW KDTree\n******************************\n"<< std::endl;
 
 		delete[] cmssw_points;
 	}
