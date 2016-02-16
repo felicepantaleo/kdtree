@@ -104,48 +104,39 @@ private:
 };
 
 
-
-/* A utility function to construct a Point from a range of iterators. */
-template < typename TYPE, size_t N, typename IteratorType>
-KDPoint<TYPE, N > KDPointFromRange(IteratorType begin, IteratorType end) {
-	KDPoint<TYPE, N > result;
-  copy(begin, end, result.begin());
-  return result;
-}
-
 /* Utility functions to create 1-, 2-, 3-, or 4-Points from values. */
 template <typename TYPE>
-KDPoint<TYPE, 1> MakeKDPoint(TYPE x) {
+KDPoint<TYPE, 1> make_KDPoint(TYPE x) {
   KDPoint<TYPE, 1> result;
-  result[0] = x;
+  result.setDimension(0,x);
   return result;
 }
 
 template <typename TYPE>
-KDPoint<TYPE, 2> MakeKDPoint(TYPE x, TYPE y) {
+KDPoint<TYPE, 2> make_KDPoint(TYPE x, TYPE y) {
   KDPoint<TYPE, 2> result;
-  result[0] = x;
-  result[1] = y;
+  result.setDimension(0,x);
+  result.setDimension(1,y);
   return result;
 }
 
 
 template <typename TYPE>
-KDPoint<TYPE, 3> MakeKDPoint(TYPE x, TYPE y, TYPE z) {
+KDPoint<TYPE, 3> make_KDPoint(TYPE x, TYPE y, TYPE z) {
   KDPoint<TYPE, 3> result;
-  result[0] = x;
-  result[1] = y;
-  result[2] = z;
+  result.setDimension(0,x);
+  result.setDimension(1,y);
+  result.setDimension(2,z);
   return result;
 }
 
 template <typename TYPE>
-KDPoint<TYPE, 4> MakeKDPoint(TYPE x, TYPE y, TYPE z, TYPE w) {
+KDPoint<TYPE, 4> make_KDPoint(TYPE x, TYPE y, TYPE z, TYPE w) {
   KDPoint<TYPE, 4> result;
-  result[0] = x;
-  result[1] = y;
-  result[2] = z;
-  result[3] = w;
+  result.setDimension(0,x);
+  result.setDimension(1,y);
+  result.setDimension(2,z);
+  result.setDimension(3,w);
   return result;
 }
 

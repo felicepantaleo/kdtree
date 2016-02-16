@@ -38,6 +38,20 @@ public:
 
 	}
 
+	FKDTree(const long int nPoints, const std::vector<KDPoint<TYPE, numberOfDimensions> >& points)
+	{
+		theNumberOfPoints = nPoints;
+		theDepth = std::floor(log2(nPoints));
+		theMaxNumberOfNodes = (1 << (theDepth + 1)) - 1;
+		for (auto& x : theDimensions)
+			x.resize(theNumberOfPoints);
+		theIntervalLength.resize(theNumberOfPoints, 0);
+		theIntervalMin.resize(theNumberOfPoints, 0);
+		theIds.reserve(theNumberOfPoints);
+		thePoints=points;
+
+	}
+
 	void push_back(const KDPoint<TYPE, numberOfDimensions>& point)
 	{
 
