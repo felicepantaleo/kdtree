@@ -249,7 +249,7 @@ public:
 		return result;
 	}
 
-	bool test_correct_build(unsigned int index, int dimension)
+	bool test_correct_build(unsigned int index=0, int dimension=0)
 	{
 
 		unsigned int leftSonIndexInArray = 2 * index + 1;
