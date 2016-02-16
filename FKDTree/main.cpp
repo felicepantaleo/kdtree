@@ -33,7 +33,7 @@ int main(int argc, char* argv[])
 		return 1;
 	}
 
-	int nPoints;
+	int nPoints=100000;
 	bool runTheTests = false;
 	bool runSequential = false;
 	bool runFKDTree = false;
@@ -111,6 +111,17 @@ int main(int argc, char* argv[])
 		maxPoints.push_back(M);
 
 	}
+//needed by the vanilla algo
+	float4* cmssw_points;
+	cmssw_points = new float4[nPoints];
+	for (int j = 0; j < nPoints; j++)
+	{
+		cmssw_points[j].x = points[j][0];
+		cmssw_points[j].y = points[j][1];
+		cmssw_points[j].z = points[j][2];
+		cmssw_points[j].w = j; //Use this to save the index
+
+	}
 
 	std::cout << "Cloud of points generated.\n" << std::endl;
 	std::this_thread::sleep_for(std::chrono::seconds(1));
@@ -128,15 +139,15 @@ int main(int argc, char* argv[])
 		kdtree.build();
 		std::chrono::steady_clock::time_point end_building =
 				std::chrono::steady_clock::now();
-		std::cout << "building kdtree with " << nPoints << " points took "
+		std::cout << "building FKDTree with " << nPoints << " points took "
 				<< std::chrono::duration_cast < std::chrono::milliseconds
 				> (end_building - start_building).count() << "ms" << std::endl;
 		if (runTheTests)
 		{
 			if (kdtree.test_correct_build())
-				std::cout << "KDTree built correctly" << std::endl;
+				std::cout << "FKDTree built correctly" << std::endl;
 			else
-				std::cerr << "KDTree wrong" << std::endl;
+				std::cerr << "FKDTree wrong" << std::endl;
 		}
 
 		std::chrono::steady_clock::time_point start_searching =
@@ -146,7 +157,7 @@ int main(int argc, char* argv[])
 		std::chrono::steady_clock::time_point end_searching =
 				std::chrono::steady_clock::now();
 
-		std::cout << "searching points using kdtree took "
+		std::cout << "searching points using FKDTree took "
 				<< std::chrono::duration_cast < std::chrono::milliseconds
 				> (end_searching - start_searching).count()<< "ms\n"
 				<< " found points: " << pointsFound<< "\n******************************\n"
@@ -191,16 +202,7 @@ int main(int argc, char* argv[])
 	if (runOldKDTree)
 	{
 
-		float4* cmssw_points;
-		cmssw_points = new float4[nPoints];
-		for (int j = 0; j < nPoints; j++)
-		{
-			cmssw_points[j].x = points[j][0];
-			cmssw_points[j].y = points[j][1];
-			cmssw_points[j].z = points[j][2];
-			cmssw_points[j].w = j; //Use this to save the index
 
-		}
 		std::cout << "Vanilla CMSSW KDTree run will start in 1 second.\n"
 				<< std::endl;
 		std::this_thread::sleep_for(std::chrono::seconds(1));
@@ -265,14 +267,14 @@ int main(int argc, char* argv[])
 		std::chrono::steady_clock::time_point end_searching =
 				std::chrono::steady_clock::now();
 
-		std::cout << "building cmssw kdtree with " << nPoints << " points took "
+		std::cout << "building Vanilla CMSSW KDTree with " << nPoints << " points took "
 				<< std::chrono::duration_cast < std::chrono::milliseconds
 				> (end_building - start_building).count() << "ms" << std::endl;
-		std::cout << "searching points using cmssw kdtree took "
+		std::cout << "searching points using Vanilla CMSSW KDTree took "
 				<< std::chrono::duration_cast < std::chrono::milliseconds
 				> (end_searching - start_searching).count() << "ms"
 						<< std::endl;
-		std::cout << pointsFound << " points found cmssw in "
+		std::cout << pointsFound << " points found using Vanilla CMSSW KDTree in "
 				<< std::chrono::duration_cast < std::chrono::milliseconds
 				> (end_searching - start_searching).count() << "ms\n"
 				<< " found points: " << pointsFound<< "\n******************************\n"
